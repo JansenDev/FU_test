@@ -13,7 +13,8 @@ export class HomeComponent implements OnInit {
     this.findResourceMap(0);
     this.getAllPeriods();
     this.getColaborators();
-    this.getClients()
+    this.getClients();
+    this.getCollaboratorName();
   }
 
   resourceMap_list: any = {};
@@ -25,7 +26,8 @@ export class HomeComponent implements OnInit {
   };
   periods_list: any = [];
   collaborators_list: any = [];
- client_list: any = [];
+  client_list: any = [];
+  collaboratorName_list: any = [];
 
   getAllPeriods() {
     return this.resourceService.getAllPeriods().subscribe((periods: []) => {
@@ -36,17 +38,29 @@ export class HomeComponent implements OnInit {
 
   getColaborators() {
     return this.resourceService.getAllPeriods().subscribe((periods: []) => {
-      let periods_list = periods.map((x) => x['perfil']);
+      let collaborators_list = periods.map((x) => x['perfil']);
 
-      this.collaborators_list = periods_list;
+      this.collaborators_list = collaborators_list;
+    });
+  }
+
+  getCollaboratorName() {
+    return this.resourceService.getAllPeriods().subscribe((periods: []) => {
+      let collaboratorName_list = periods.map((x) => x['colaborador']);
+
+      this.collaboratorName_list = collaboratorName_list;
     });
   }
 
   getClients() {
     return this.resourceService.getAllPeriods().subscribe((periods: []) => {
-      let periods_list = periods.map((x) => x['client']);
+      let client_list = periods.map((x) => x['client']);
 
-      this.client_list = periods_list;
+      let clientFiltered_list = client_list.filter(
+        (name, index) => client_list.indexOf(name) == index
+      );
+
+      this.client_list = clientFiltered_list;
     });
   }
 
@@ -57,7 +71,7 @@ export class HomeComponent implements OnInit {
 
     this.resourceService.findResourceMap(...options).subscribe((resource) => {
       this.resourceMap_list = resource;
-console.log(resource);
+      console.log(resource);
 
       this.pagination.total_documents = resource.total_documents;
       this.pagination.page = resource.page;
