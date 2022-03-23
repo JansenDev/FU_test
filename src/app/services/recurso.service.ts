@@ -17,6 +17,8 @@ export class RecursoService {
 
     return this.httpClient.get<any>(URL).pipe(
       map((resource) => {
+        if (limit == 0) end = resource.length;
+
         let documents = resource.slice(start, end);
         let total_documents = resource.length;
         let total_pages = Math.trunc(total_documents / limit);
@@ -28,6 +30,14 @@ export class RecursoService {
           total_documents,
           total_pages,
         };
+      })
+    );
+  }
+
+  getAllPeriods() {
+    return this.findResourceMap(0, 0).pipe(
+      map((data) => {
+        return data.documents;
       })
     );
   }
