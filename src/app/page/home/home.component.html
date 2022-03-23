@@ -13,7 +13,7 @@
       <div class="form-row align-items-center d-flex justify-content-between">
         <div class="col-auto my-1">
           <select class="custom-select mr-sm-2">
-            <option *ngFor="let periodo of periods_list" selected>
+            <option *ngFor="let periodo of periods_list">
               {{ periodo }}
             </option>
           </select>
@@ -31,6 +31,7 @@
           <select class="custom-select mr-sm-2">
             <option *ngFor="let client of client_list">
               {{ client }}
+            </option>
           </select>
         </div>
         <div class="col-sm-3 my-1">
@@ -38,7 +39,14 @@
             type="text"
             class="form-control"
             placeholder="Nombre y apellidos"
+            list="browsers"
           />
+          <datalist id="browsers">
+            <option
+              *ngFor="let name of collaboratorName_list"
+              [value]="name"
+            ></option>
+          </datalist>
         </div>
         <div class="col-auto my-1">
           <button type="submit" class="btn btn-primary">Buscar</button>
@@ -83,19 +91,19 @@
             {{ resource["ln"] }}
           </th>
           <td>
-            {{ resource["colaborador"] }}
+            {{ resource["client"] }}
           </td>
           <td>
-            {{ resource["client"] }}
+            {{ resource["colaborador"] }}
           </td>
           <td>{{ resource["perfil"] }}</td>
           <td>{{ resource["nivel"] }}</td>
           <td>{{ resource["f_inicio"] }}</td>
           <td>{{ resource["f_fin"] }}</td>
-          <td>{{ resource["asignacion"] }}</td>
-          <td>{{ resource["clm_efectivo"] }}</td>
-          <td>{{ resource["produccion"] }}</td>
-          <td>{{ resource["prod"] / 100 }}</td>
+          <td class="text-center">{{ resource["asignacion"] }}%</td>
+          <td class="text-center">{{ resource["clm_efectivo"] }}</td>
+          <td class="text-center">{{ resource["produccion"] }}</td>
+          <td class="text-center">{{ resource["prod"] / 100 }}</td>
         </tr>
       </tbody>
     </table>
