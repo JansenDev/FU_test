@@ -10,11 +10,12 @@ export class HomeComponent implements OnInit {
   constructor(private resourceService: RecursoService) {}
 
   ngOnInit(): void {
-    this.findResourceMap(0);
+    // this.findResourceMap(0);
     this.getAllPeriods();
     this.getColaborators();
     this.getClients();
     this.getCollaboratorName();
+    this.findResourcesPerPage(0);
   }
 
   resourceMap_list: any = {};
@@ -28,6 +29,23 @@ export class HomeComponent implements OnInit {
   collaborators_list: any = [];
   client_list: any = [];
   collaboratorName_list: any = [];
+
+  findResourcesPerPage(page = 0, limit = 5) {
+    let options = [page];
+    if (limit != 5) options.push(limit);
+
+    this.resourceService
+      .findResourcesPerPage(...options)
+      .subscribe((resourceMap_list) => {
+        console.log(resourceMap_list);
+
+        this.resourceMap_list = resourceMap_list;
+
+        this.pagination.total_documents = resourceMap_list.total_documents;
+        this.pagination.page = resourceMap_list.page;
+        this.pagination.total_pages = resourceMap_list.total_pages;
+      });
+  }
 
   getAllPeriods() {
     return this.resourceService.getAllPeriods().subscribe((periods: []) => {
@@ -71,7 +89,7 @@ export class HomeComponent implements OnInit {
 
     this.resourceService.findResourceMap(...options).subscribe((resource) => {
       this.resourceMap_list = resource;
-      console.log(resource);
+      // console.log(resource);
 
       this.pagination.total_documents = resource.total_documents;
       this.pagination.page = resource.page;
@@ -80,7 +98,7 @@ export class HomeComponent implements OnInit {
   }
 
   nextPage(currentPage = 0) {
-    this.findResourceMap(currentPage);
+    this.findResourcesPerPage(currentPage);
   }
 
   getFirstDigit(n: number) {
